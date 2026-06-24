@@ -1149,7 +1149,7 @@ function exportPDF() {
       sf(10,'normal'); doc.setTextColor(26,26,24);
       const nl=doc.splitTextToSize(e.food,contentW*0.36);
       tx(nl,margin+4,y+2);
-      sf(9); doc.setTextColor(107,107,103); tx(e.serving,margin+contentW*0.38,y+2);
+      sf(9); doc.setTextColor(107,107,103);       const servingTrunc = doc.splitTextToSize(e.serving, contentW*0.13)[0];       tx(servingTrunc, margin+contentW*0.38, y+2);
       sf(10); doc.setTextColor(26,26,24);
       tx(e.fiber.toFixed(1)+'g',   margin+contentW*0.53,y+2,{align:'right'});
       tx(e.protein.toFixed(1)+'g', margin+contentW*0.63,y+2,{align:'right'});
