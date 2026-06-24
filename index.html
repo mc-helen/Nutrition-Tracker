@@ -265,6 +265,29 @@ button:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
   min-width: 32px; min-height: 32px; flex-shrink: 0;
 }
 .remove-btn:hover { color: var(--red); background: none; transform: none; }
+.edit-btn {
+  background: none; border: none; cursor: pointer;
+  color: var(--text-tertiary); padding: 4px; font-size: 16px; line-height: 1;
+  display: flex; align-items: center; justify-content: center;
+  min-width: 32px; min-height: 32px; flex-shrink: 0;
+}
+.edit-btn:hover { color: var(--blue-accent); background: none; transform: none; }
+.entry-actions { display: flex; align-items: center; gap: 2px; flex-shrink: 0; }
+
+/* Inline edit panel */
+.edit-panel {
+  margin-top: 8px;
+  border: 0.5px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 12px;
+  background: var(--bg-secondary);
+}
+.edit-panel-title { font-size: 12px; font-weight: 500; color: var(--text-secondary); margin-bottom: 10px; text-transform: uppercase; letter-spacing: 0.04em; }
+.edit-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 10px; }
+.edit-grid .full { grid-column: 1 / -1; }
+.edit-field label { font-size: 12px; color: var(--text-secondary); display: block; margin-bottom: 4px; }
+.edit-btns { display: flex; gap: 8px; }
+.edit-btns button { flex: 1; }
 
 .empty-state { text-align: center; padding: 2rem 0; color: var(--text-secondary); font-size: 14px; }
 .empty-state i { font-size: 32px; display: block; margin-bottom: 8px; color: var(--text-tertiary); }
@@ -429,7 +452,7 @@ button:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
         <div class="metric-value" id="total-sodium">0 <span class="metric-unit">mg</span></div>
       </div>
       <div class="metric">
-        <div class="metric-label">Sugar</div>
+        <div class="metric-label">Added sugar</div>
         <div class="metric-value" id="total-sugar">0 <span class="metric-unit">g</span></div>
       </div>
     </div>
@@ -462,7 +485,7 @@ button:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
           <span class="log-header-col">Prot</span>
           <span class="log-header-col">Fat</span>
           <span class="log-header-col">Na</span>
-          <span class="log-header-col">Sugar</span>
+          <span class="log-header-col">Add. sugar</span>
         </div>
       </div>
       <div id="log-items"></div>
@@ -722,7 +745,7 @@ async function searchUSDA(query) {
       per100: {
         fiber:   getN(f,[1079]), protein: getN(f,[1003]),
         fat:     getN(f,[1004]), sodium:  getN(f,[1093]),
-        sugar:   getN(f,[2000,1235])
+        sugar:   getN(f,[1235])
       }
     };
   });
@@ -753,7 +776,7 @@ async function searchOFF(query) {
         protein: parseFloat(n['proteins_100g']||0),
         fat:     parseFloat(n['fat_100g']||0),
         sodium:  parseFloat(n['sodium_100g']||0) * 1000,
-        sugar:   parseFloat(n['sugars_100g']||0)
+        sugar:   parseFloat(n['added_sugars_100g']||0)
       }
     };
   });
@@ -812,7 +835,7 @@ function updateServingPreview() {
     `<span><span class="preview-label">Protein</span><strong>${n.protein.toFixed(1)}g</strong></span>` +
     `<span><span class="preview-label">Fat</span><strong>${n.fat.toFixed(1)}g</strong></span>` +
     `<span><span class="preview-label">Sodium</span><strong>${n.sodium}mg</strong></span>` +
-    `<span><span class="preview-label">Sugar</span><strong>${n.sugar.toFixed(1)}g</strong></span>`;
+    `<span><span class="preview-label">Added sugar</span><strong>${n.sugar.toFixed(1)}g</strong></span>`;
 }
 
 function confirmServing() {
@@ -880,7 +903,46 @@ function removeEntry(id) {
   renderTotals(); renderLog(); updateGoalBars(); saveState();
 }
 
-// ── Render ────────────────────────────────────────────────────────────────────
+// ── Edit entry ────────────────────────────────────────────────────────────────
+function openEdit(id) {
+  // Close any other open edit panels first
+  document.querySelectorAll('.edit-panel').forEach(p => p.style.display = 'none');
+  const panel = document.getElementById(`edit-panel-${id}`);
+  if (panel) panel.style.display = 'block';
+}
+
+function cancelEdit(id) {
+  const panel = document.getElementById(`edit-panel-${id}`);
+  if (panel) panel.style.display = 'none';
+}
+
+function saveEdit(id) {
+  const idx = entries.findIndex(e => e.id === id); if (idx === -1) return;
+  const old = entries[idx];
+
+  const newFiber   = parseFloat(document.getElementById(`ef-fiber-${id}`).value)   || 0;
+  const newProtein = parseFloat(document.getElementById(`ef-protein-${id}`).value) || 0;
+  const newFat     = parseFloat(document.getElementById(`ef-fat-${id}`).value)     || 0;
+  const newSodium  = parseFloat(document.getElementById(`ef-sodium-${id}`).value)  || 0;
+  const newSugar   = parseFloat(document.getElementById(`ef-sugar-${id}`).value)   || 0;
+
+  // Adjust totals by the difference
+  totals.fiber   = parseFloat(Math.max(0, totals.fiber   - old.fiber   + newFiber).toFixed(1));
+  totals.protein = parseFloat(Math.max(0, totals.protein - old.protein + newProtein).toFixed(1));
+  totals.fat     = parseFloat(Math.max(0, totals.fat     - old.fat     + newFat).toFixed(1));
+  totals.sodium  = Math.max(0, Math.round(totals.sodium  - old.sodium  + newSodium));
+  totals.sugar   = parseFloat(Math.max(0, totals.sugar   - old.sugar   + newSugar).toFixed(1));
+
+  entries[idx] = {
+    ...old,
+    food:    document.getElementById(`ef-name-${id}`).value.trim()    || old.food,
+    serving: document.getElementById(`ef-serving-${id}`).value.trim() || old.serving,
+    nova:    parseInt(document.getElementById(`ef-nova-${id}`).value) || 0,
+    fiber:   newFiber, protein: newProtein, fat: newFat, sodium: newSodium, sugar: newSugar
+  };
+
+  renderTotals(); renderLog(); updateGoalBars(); saveState();
+}
 function renderTotals() {
   document.getElementById('total-fiber').innerHTML   = `${totals.fiber.toFixed(1)} <span class="metric-unit">g</span>`;
   document.getElementById('total-protein').innerHTML = `${totals.protein.toFixed(1)} <span class="metric-unit">g</span>`;
@@ -896,13 +958,12 @@ function renderLog() {
   if (!entries.length) { section.style.display='none'; empty.style.display='block'; return; }
   section.style.display='block'; empty.style.display='none';
   container.innerHTML = entries.map(e => `
-    <div class="log-item-card">
+    <div class="log-item-card" id="entry-${e.id}">
       <div class="log-item-top">
         <div class="food-col">
           <div class="food-name" title="${e.food}">${e.food}</div>
           <div class="food-meta">${e.serving} · ${e.source} · ${novaBadge(e.nova)}</div>
         </div>
-        <!-- Desktop columns -->
         <div class="log-table-cols">
           <span class="log-tc">${e.fiber.toFixed(1)}</span>
           <span class="log-tc">${e.protein.toFixed(1)}</span>
@@ -910,17 +971,68 @@ function renderLog() {
           <span class="log-tc">${e.sodium}</span>
           <span class="log-tc">${e.sugar.toFixed(1)}</span>
         </div>
-        <button class="remove-btn" onclick="removeEntry(${e.id})" aria-label="Remove ${e.food}">
-          <i class="ti ti-x" aria-hidden="true"></i>
-        </button>
+        <div class="entry-actions">
+          <button class="edit-btn" onclick="openEdit(${e.id})" aria-label="Edit ${e.food}">
+            <i class="ti ti-pencil" aria-hidden="true"></i>
+          </button>
+          <button class="remove-btn" onclick="removeEntry(${e.id})" aria-label="Remove ${e.food}">
+            <i class="ti ti-x" aria-hidden="true"></i>
+          </button>
+        </div>
       </div>
-      <!-- Mobile nutrient grid -->
       <div class="log-nutrients">
         <div class="log-nutrient"><div class="log-nutrient-label">Fiber</div><div class="log-nutrient-value">${e.fiber.toFixed(1)}g</div></div>
         <div class="log-nutrient"><div class="log-nutrient-label">Protein</div><div class="log-nutrient-value">${e.protein.toFixed(1)}g</div></div>
         <div class="log-nutrient"><div class="log-nutrient-label">Fat</div><div class="log-nutrient-value">${e.fat.toFixed(1)}g</div></div>
         <div class="log-nutrient"><div class="log-nutrient-label">Sodium</div><div class="log-nutrient-value">${e.sodium}mg</div></div>
-        <div class="log-nutrient"><div class="log-nutrient-label">Sugar</div><div class="log-nutrient-value">${e.sugar.toFixed(1)}g</div></div>
+        <div class="log-nutrient"><div class="log-nutrient-label">Added sugar</div><div class="log-nutrient-value">${e.sugar.toFixed(1)}g</div></div>
+      </div>
+      <div class="edit-panel" id="edit-panel-${e.id}" style="display:none;">
+        <div class="edit-panel-title">Edit entry</div>
+        <div class="edit-grid">
+          <div class="edit-field full">
+            <label>Food name</label>
+            <input type="text" id="ef-name-${e.id}" value="${e.food.replace(/"/g,'&quot;')}" />
+          </div>
+          <div class="edit-field full">
+            <label>Serving</label>
+            <input type="text" id="ef-serving-${e.id}" value="${e.serving.replace(/"/g,'&quot;')}" />
+          </div>
+          <div class="edit-field">
+            <label>Fiber (g)</label>
+            <input type="number" id="ef-fiber-${e.id}" value="${e.fiber}" min="0" step="0.1" />
+          </div>
+          <div class="edit-field">
+            <label>Protein (g)</label>
+            <input type="number" id="ef-protein-${e.id}" value="${e.protein}" min="0" step="0.1" />
+          </div>
+          <div class="edit-field">
+            <label>Fat (g)</label>
+            <input type="number" id="ef-fat-${e.id}" value="${e.fat}" min="0" step="0.1" />
+          </div>
+          <div class="edit-field">
+            <label>Sodium (mg)</label>
+            <input type="number" id="ef-sodium-${e.id}" value="${e.sodium}" min="0" step="1" />
+          </div>
+          <div class="edit-field">
+            <label>Added sugar (g)</label>
+            <input type="number" id="ef-sugar-${e.id}" value="${e.sugar}" min="0" step="0.1" />
+          </div>
+          <div class="edit-field">
+            <label>NOVA group</label>
+            <select id="ef-nova-${e.id}">
+              <option value="0" ${e.nova===0?'selected':''}>Unknown</option>
+              <option value="1" ${e.nova===1?'selected':''}>1 — Unprocessed</option>
+              <option value="2" ${e.nova===2?'selected':''}>2 — Culinary ingredient</option>
+              <option value="3" ${e.nova===3?'selected':''}>3 — Processed</option>
+              <option value="4" ${e.nova===4?'selected':''}>4 — Ultra-processed</option>
+            </select>
+          </div>
+        </div>
+        <div class="edit-btns">
+          <button class="btn-primary" onclick="saveEdit(${e.id})">Save</button>
+          <button onclick="cancelEdit(${e.id})">Cancel</button>
+        </div>
       </div>
     </div>`).join('');
 }
@@ -992,7 +1104,7 @@ function exportPDF() {
     {label:'Protein', value:`${totals.protein.toFixed(1)}g`, goal:`Goal: ${d.proteinGoal}g`},
     {label:'Fat',     value:`${totals.fat.toFixed(1)}g`,     goal:''},
     {label:'Sodium',  value:`${totals.sodium}mg`,            goal:''},
-    {label:'Sugar',   value:`${totals.sugar.toFixed(1)}g`,   goal:''}
+    {label:'Added sugar', value:`${totals.sugar.toFixed(1)}g`,   goal:''}
   ];
   const bw=(contentW-32)/5;
   mets.forEach((m,i)=>{
@@ -1028,7 +1140,7 @@ function exportPDF() {
     tx('Prot',   margin+contentW*0.63,y+4,{align:'right'});
     tx('Fat',    margin+contentW*0.72,y+4,{align:'right'});
     tx('Na',     margin+contentW*0.83,y+4,{align:'right'});
-    tx('Sugar',  margin+contentW*0.92,y+4,{align:'right'});
+    tx('Add.sugar',margin+contentW*0.92,y+4,{align:'right'});
     tx('NOVA',   margin+contentW,     y+4,{align:'right'});
     y+=20;
     doc.setLineWidth(0.5); doc.setDrawColor(220,220,216);
