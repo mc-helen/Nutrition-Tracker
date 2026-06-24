@@ -49,69 +49,76 @@ body {
   background: var(--bg-tertiary);
   color: var(--text);
   min-height: 100vh;
-  padding: 2rem 1rem 4rem;
+  padding: 1.25rem 0.75rem 5rem;
   font-size: 16px;
   line-height: 1.5;
+  -webkit-text-size-adjust: 100%;
 }
 
 .container { max-width: 680px; margin: 0 auto; }
 h1 { font-size: 20px; font-weight: 500; margin-bottom: 0.2rem; }
-.subtitle { font-size: 13px; color: var(--text-secondary); margin-bottom: 1.75rem; }
+.subtitle { font-size: 13px; color: var(--text-secondary); margin-bottom: 1.25rem; }
 
 .card {
   background: var(--bg);
   border-radius: var(--radius-lg);
   border: 0.5px solid var(--border);
-  padding: 1.25rem;
-  margin-bottom: 1rem;
+  padding: 1rem;
+  margin-bottom: 0.75rem;
 }
 
 .card-label {
   font-size: 11px; font-weight: 500; color: var(--text-secondary);
-  text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 12px;
+  text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 10px;
 }
-
 .card-header {
-  display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px;
+  display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px;
 }
 .card-header .card-label { margin-bottom: 0; }
 
+/* Inputs — taller touch targets on mobile */
 input[type="text"], input[type="password"], input[type="number"], input[type="date"], select {
-  padding: 8px 12px;
+  padding: 10px 12px;
   border: 0.5px solid var(--border-strong);
   border-radius: var(--radius-md);
-  font-size: 14px;
+  font-size: 16px; /* 16px prevents iOS zoom on focus */
   font-family: var(--font);
   background: var(--bg);
   color: var(--text);
   outline: none;
   transition: border-color 0.15s;
   width: 100%;
+  -webkit-appearance: none;
+  appearance: none;
 }
 input:focus, select:focus { border-color: var(--blue-accent); box-shadow: 0 0 0 2px rgba(36,113,163,0.15); }
-input[type="password"] { font-family: var(--font-mono); font-size: 13px; }
+input[type="password"] { font-family: var(--font-mono); }
+select { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%236b6b67' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 12px center; padding-right: 32px; }
 
 button {
-  padding: 8px 14px;
+  padding: 10px 16px;
   border: 0.5px solid var(--border-strong);
   border-radius: var(--radius-md);
-  font-size: 14px;
+  font-size: 15px;
   font-family: var(--font);
   background: var(--bg);
   color: var(--text);
   cursor: pointer;
   white-space: nowrap;
   transition: background 0.1s;
+  min-height: 44px; /* Apple HIG minimum touch target */
+  display: inline-flex; align-items: center; justify-content: center; gap: 6px;
 }
 button:hover { background: var(--bg-secondary); }
-button:active { transform: scale(0.98); }
+button:active { transform: scale(0.97); }
 button:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
 .btn-primary { background: var(--text); color: var(--bg); border-color: var(--text); }
 .btn-primary:hover { opacity: 0.85; background: var(--text); }
+.btn-sm { padding: 7px 12px; font-size: 14px; min-height: 36px; }
 
 .row { display: flex; gap: 8px; align-items: center; }
-.row input, .row select { flex: 1; }
-.hint { font-size: 12px; color: var(--text-secondary); margin-top: 8px; }
+.row input, .row select { flex: 1; min-width: 0; }
+.hint { font-size: 12px; color: var(--text-secondary); margin-top: 8px; line-height: 1.5; }
 .hint a { color: var(--blue-accent); }
 .status { font-size: 13px; color: var(--text-secondary); min-height: 18px; margin: 8px 0 0; }
 .status.error { color: var(--red); }
@@ -120,9 +127,9 @@ button:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
 /* DB tabs */
 .db-tabs { display: flex; gap: 6px; margin-bottom: 12px; flex-wrap: wrap; }
 .db-tab {
-  padding: 5px 12px; border-radius: 20px; font-size: 13px; cursor: pointer;
+  padding: 7px 14px; border-radius: 20px; font-size: 14px; cursor: pointer;
   border: 0.5px solid var(--border-strong); background: var(--bg); color: var(--text-secondary);
-  transition: all 0.1s;
+  transition: all 0.1s; min-height: 36px; display: inline-flex; align-items: center;
 }
 .db-tab.active { background: var(--text); color: var(--bg); border-color: var(--text); }
 .db-tab:hover:not(.active) { background: var(--bg-secondary); color: var(--text); }
@@ -130,12 +137,13 @@ button:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
 /* Results */
 .results-list { list-style: none; border: 0.5px solid var(--border); border-radius: var(--radius-md); overflow: hidden; margin-top: 8px; }
 .results-list li {
-  padding: 10px 14px; font-size: 14px; cursor: pointer;
+  padding: 12px 14px; font-size: 14px; cursor: pointer;
   border-bottom: 0.5px solid var(--border); color: var(--text);
-  display: flex; flex-direction: column; gap: 2px;
+  display: flex; flex-direction: column; gap: 3px;
+  min-height: 48px; justify-content: center;
 }
 .results-list li:last-child { border-bottom: none; }
-.results-list li:hover { background: var(--bg-secondary); }
+.results-list li:active { background: var(--bg-secondary); }
 .result-meta { font-size: 12px; color: var(--text-secondary); }
 
 /* Serving adjuster */
@@ -143,21 +151,23 @@ button:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
   margin-top: 10px; border: 0.5px solid var(--border);
   border-radius: var(--radius-md); padding: 14px; background: var(--bg-secondary);
 }
-.serving-panel-title { font-size: 13px; font-weight: 500; margin-bottom: 6px; }
-.serving-panel-food { font-size: 13px; color: var(--text-secondary); margin-bottom: 12px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.serving-row { display: flex; gap: 8px; align-items: flex-end; flex-wrap: wrap; }
+.serving-panel-title { font-size: 13px; font-weight: 500; margin-bottom: 4px; }
+.serving-panel-food { font-size: 13px; color: var(--text-secondary); margin-bottom: 12px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.serving-row { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.serving-row-btns { display: flex; gap: 8px; margin-top: 8px; }
+.serving-row-btns button { flex: 1; }
 .serving-field { display: flex; flex-direction: column; gap: 4px; }
 .serving-field label { font-size: 12px; color: var(--text-secondary); }
-.serving-field input { width: 90px; }
-.serving-field select { width: 130px; }
-.serving-preview { font-size: 13px; color: var(--text-secondary); padding: 8px 0 0; display: flex; gap: 12px; flex-wrap: wrap; }
-.serving-preview span { white-space: nowrap; }
-.serving-preview strong { color: var(--text); }
-
-/* Manual add form */
-.manual-grid {
-  display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 10px;
+.serving-preview {
+  font-size: 13px; color: var(--text-secondary); padding: 10px 0 0;
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px;
 }
+.serving-preview span { white-space: nowrap; }
+.serving-preview strong { color: var(--text); display: block; font-size: 15px; }
+.serving-preview .preview-label { font-size: 11px; color: var(--text-tertiary); }
+
+/* Manual add */
+.manual-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 10px; }
 .manual-grid .full { grid-column: 1 / -1; }
 .manual-field label { font-size: 12px; color: var(--text-secondary); display: block; margin-bottom: 4px; }
 
@@ -178,63 +188,108 @@ button:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
   .nova-4 { background: #3a0a1e; color: #f48fb1; }
 }
 
-/* Metrics */
-.metrics { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 1rem; }
-.metrics-5 { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; margin-bottom: 1rem; }
-.metric { background: var(--bg-secondary); border-radius: var(--radius-md); padding: 0.85rem; }
-.metric-label { font-size: 12px; color: var(--text-secondary); margin-bottom: 4px; }
-.metric-value { font-size: 20px; font-weight: 500; color: var(--text); }
-.metric-unit { font-size: 12px; color: var(--text-secondary); font-weight: 400; }
+/* Metrics — 3 col on mobile, 5 on wide */
+.metrics-5 {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px; margin-bottom: 1rem;
+}
+@media (min-width: 520px) {
+  .metrics-5 { grid-template-columns: repeat(5, 1fr); }
+}
+.metric { background: var(--bg-secondary); border-radius: var(--radius-md); padding: 0.75rem; }
+.metric-label { font-size: 11px; color: var(--text-secondary); margin-bottom: 4px; }
+.metric-value { font-size: 18px; font-weight: 500; color: var(--text); }
+.metric-unit { font-size: 11px; color: var(--text-secondary); font-weight: 400; }
 
 /* Goal bars */
-.goal-row { display: flex; align-items: center; gap: 10px; font-size: 13px; color: var(--text-secondary); margin-bottom: 10px; }
+.goal-row { display: flex; align-items: center; gap: 8px; font-size: 13px; color: var(--text-secondary); margin-bottom: 10px; }
 .goal-row:last-child { margin-bottom: 0; }
-.goal-row input[type="number"] { width: 60px; flex: none; }
-.goal-bar-wrap { flex: 1; height: 6px; background: var(--border); border-radius: 3px; overflow: hidden; }
+.goal-label { min-width: 48px; font-size: 13px; }
+.goal-input-wrap { display: flex; align-items: center; gap: 4px; }
+.goal-input-wrap input[type="number"] { width: 52px; flex: none; padding: 6px 8px; font-size: 14px; }
+.goal-input-wrap span { font-size: 12px; white-space: nowrap; }
+.goal-bar-wrap { flex: 1; height: 6px; background: var(--border); border-radius: 3px; overflow: hidden; min-width: 0; }
 .goal-bar { height: 100%; border-radius: 3px; transition: width 0.3s; }
 .goal-bar.fiber { background: var(--green); }
 .goal-bar.protein { background: var(--blue-accent); }
+.goal-pct { min-width: 34px; text-align: right; font-weight: 500; font-size: 13px; }
 
-/* Water */
-.water-total { font-size: 22px; font-weight: 500; color: var(--blue-water); margin-bottom: 10px; }
-.water-total span { font-size: 13px; font-weight: 400; color: var(--text-secondary); }
-.water-btns { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 10px; }
-.water-btn { font-size: 13px; padding: 7px 12px; border-color: var(--blue-water); color: var(--blue-water); }
-.water-btn:hover { background: rgba(46,134,193,0.08); }
-.water-custom { display: flex; gap: 8px; align-items: center; }
-.water-custom input { width: 90px; flex: none; }
-.water-custom label { font-size: 13px; color: var(--text-secondary); white-space: nowrap; }
-
-/* Log */
-.log-header {
-  display: grid; grid-template-columns: 1fr repeat(6, 52px) 28px;
-  gap: 6px; font-size: 10px; font-weight: 500; color: var(--text-secondary);
-  padding-bottom: 8px; border-bottom: 0.5px solid var(--border);
+/* Log — card layout on mobile, table on wide screens */
+.log-section-header {
+  font-size: 11px; font-weight: 500; color: var(--text-secondary);
   text-transform: uppercase; letter-spacing: 0.04em;
+  padding-bottom: 8px; border-bottom: 0.5px solid var(--border);
+  margin-bottom: 4px;
 }
-.log-header span:not(:first-child) { text-align: right; }
-.log-item {
-  display: grid; grid-template-columns: 1fr repeat(6, 52px) 28px;
-  gap: 6px; align-items: center; padding: 9px 0;
-  border-bottom: 0.5px solid var(--border); font-size: 13px;
+
+/* Mobile: stacked card per entry */
+.log-item-card {
+  padding: 10px 0;
+  border-bottom: 0.5px solid var(--border);
 }
-.log-item span:not(:first-child) { text-align: right; }
-.food-col { min-width: 0; }
-.food-name { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color: var(--text); font-size: 14px; }
-.food-meta { font-size: 11px; color: var(--text-secondary); display: flex; align-items: center; gap: 6px; margin-top: 2px; }
+.log-item-card:last-child { border-bottom: none; }
+.log-item-top {
+  display: flex; align-items: flex-start; justify-content: space-between; gap: 8px; margin-bottom: 6px;
+}
+.food-col { min-width: 0; flex: 1; }
+.food-name { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: var(--text); font-size: 14px; font-weight: 500; }
+.food-meta { font-size: 11px; color: var(--text-secondary); margin-top: 2px; display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+.log-nutrients {
+  display: grid; grid-template-columns: repeat(5, 1fr); gap: 4px;
+}
+.log-nutrient { text-align: center; }
+.log-nutrient-label { font-size: 10px; color: var(--text-tertiary); text-transform: uppercase; letter-spacing: 0.03em; }
+.log-nutrient-value { font-size: 13px; font-weight: 500; color: var(--text); }
+
+/* Desktop: show as table on wider screens */
+@media (min-width: 600px) {
+  .log-item-card { padding: 9px 0; }
+  .log-nutrients { display: none; }
+  .log-item-top { margin-bottom: 0; }
+  .log-table-cols { display: flex !important; align-items: center; gap: 4px; }
+  .log-tc { text-align: right; font-size: 13px; width: 52px; flex: none; color: var(--text); }
+  .log-section-header { display: flex; }
+  .log-header-food { flex: 1; }
+  .log-header-cols { display: flex !important; gap: 4px; }
+  .log-header-col { width: 52px; text-align: right; flex: none; }
+}
+
+.log-table-cols { display: none; }
+.log-header-cols { display: none; }
+
 .remove-btn {
   background: none; border: none; cursor: pointer;
-  color: var(--text-tertiary); padding: 0; font-size: 14px; line-height: 1;
+  color: var(--text-tertiary); padding: 4px; font-size: 16px; line-height: 1;
   display: flex; align-items: center; justify-content: center;
+  min-width: 32px; min-height: 32px; flex-shrink: 0;
 }
 .remove-btn:hover { color: var(--red); background: none; transform: none; }
 
 .empty-state { text-align: center; padding: 2rem 0; color: var(--text-secondary); font-size: 14px; }
-.empty-state i { font-size: 28px; display: block; margin-bottom: 8px; color: var(--text-tertiary); }
+.empty-state i { font-size: 32px; display: block; margin-bottom: 8px; color: var(--text-tertiary); }
+
+/* Water */
+.water-total { font-size: 24px; font-weight: 500; color: var(--blue-water); margin-bottom: 10px; }
+.water-total span { font-size: 13px; font-weight: 400; color: var(--text-secondary); }
+.water-btns { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 10px; }
+.water-btn {
+  font-size: 13px; padding: 10px 8px; border-color: var(--blue-water); color: var(--blue-water);
+  min-height: 60px; flex-direction: column; gap: 3px; text-align: center; white-space: normal; line-height: 1.3;
+}
+.water-btn:hover { background: rgba(46,134,193,0.08); }
+.water-btn-oz { font-size: 11px; opacity: 0.75; }
+.water-custom { display: flex; gap: 8px; align-items: center; }
+.water-custom input { width: 80px; flex: none; }
+.water-custom label { font-size: 13px; color: var(--text-secondary); white-space: nowrap; }
 
 /* Daily log */
-.daily-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.daily-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
 .daily-field label { font-size: 12px; color: var(--text-secondary); display: block; margin-bottom: 4px; }
+
+/* Export actions — stack on mobile */
+.export-actions { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 12px; }
+.export-actions button { flex: 1; min-width: 120px; }
 
 .disclaimer { font-size: 11px; color: var(--text-tertiary); margin-top: 1rem; line-height: 1.6; }
 .key-field label { font-size: 12px; color: var(--text-secondary); display: block; margin-bottom: 4px; }
@@ -268,10 +323,10 @@ button:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
       <div class="db-tab" data-db="manual" onclick="setDb('manual')">Manual</div>
     </div>
 
-    <!-- Search UI (USDA + OFF) -->
+    <!-- Search UI -->
     <div id="search-ui">
       <div class="row">
-        <input type="text" id="food-input" placeholder="Search USDA database (e.g. chia seeds, oats)" />
+        <input type="text" id="food-input" placeholder="Search USDA database..." />
         <button id="search-btn" onclick="searchFood()">Search</button>
       </div>
       <div class="status" id="search-status"></div>
@@ -289,18 +344,18 @@ button:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
           <div class="serving-field">
             <label>Unit</label>
             <select id="serving-unit" onchange="updateServingPreview()">
+              <option value="serving">× db serving</option>
               <option value="g">grams (g)</option>
               <option value="oz">ounces (oz)</option>
-              <option value="tbsp">tablespoons (tbsp)</option>
-              <option value="tsp">teaspoons (tsp)</option>
+              <option value="tbsp">tablespoons</option>
+              <option value="tsp">teaspoons</option>
               <option value="cup">cups</option>
-              <option value="serving">× db serving</option>
             </select>
           </div>
-          <div style="display:flex; gap:8px; align-items:flex-end;">
-            <button class="btn-primary" onclick="confirmServing()">Add to log</button>
-            <button onclick="cancelServing()">Cancel</button>
-          </div>
+        </div>
+        <div class="serving-row-btns">
+          <button class="btn-primary" onclick="confirmServing()">Add to log</button>
+          <button onclick="cancelServing()">Cancel</button>
         </div>
         <div class="serving-preview" id="serving-preview"></div>
       </div>
@@ -313,7 +368,7 @@ button:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
           <label>Food name</label>
           <input type="text" id="manual-name" placeholder="e.g. Homemade oatmeal" />
         </div>
-        <div class="manual-field">
+        <div class="manual-field full">
           <label>Serving size</label>
           <input type="text" id="manual-serving" placeholder="e.g. 1 bowl" />
         </div>
@@ -374,29 +429,41 @@ button:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
         <div class="metric-value" id="total-sodium">0 <span class="metric-unit">mg</span></div>
       </div>
       <div class="metric">
-        <div class="metric-label">Added sugar</div>
+        <div class="metric-label">Sugar</div>
         <div class="metric-value" id="total-sugar">0 <span class="metric-unit">g</span></div>
       </div>
     </div>
 
     <div class="goal-row">
-      <span style="min-width:52px;">Fiber</span>
-      <input type="number" id="fiber-goal" value="25" min="1" max="100" step="1" oninput="updateGoalBars()" />
-      <span>g</span>
+      <span class="goal-label">Fiber</span>
+      <div class="goal-input-wrap">
+        <input type="number" id="fiber-goal" value="25" min="1" max="100" step="1" oninput="updateGoalBars()" />
+        <span>g</span>
+      </div>
       <div class="goal-bar-wrap"><div class="goal-bar fiber" id="goal-bar-fiber" style="width:0%"></div></div>
-      <span id="goal-pct-fiber" style="min-width:36px; text-align:right; font-weight:500;">0%</span>
+      <span class="goal-pct" id="goal-pct-fiber">0%</span>
     </div>
     <div class="goal-row">
-      <span style="min-width:52px;">Protein</span>
-      <input type="number" id="protein-goal" value="100" min="1" max="300" step="1" oninput="updateGoalBars()" />
-      <span>g</span>
+      <span class="goal-label">Protein</span>
+      <div class="goal-input-wrap">
+        <input type="number" id="protein-goal" value="100" min="1" max="300" step="1" oninput="updateGoalBars()" />
+        <span>g</span>
+      </div>
       <div class="goal-bar-wrap"><div class="goal-bar protein" id="goal-bar-protein" style="width:0%"></div></div>
-      <span id="goal-pct-protein" style="min-width:36px; text-align:right; font-weight:500;">0%</span>
+      <span class="goal-pct" id="goal-pct-protein">0%</span>
     </div>
 
-    <div id="log-section" style="display:none; margin-top: 1rem;">
-      <div class="log-header">
-        <span>Food</span><span>Fiber</span><span>Prot</span><span>Fat</span><span>Na</span><span>Sugar</span><span>NOVA</span><span></span>
+    <div id="log-section" style="display:none; margin-top:1rem;">
+      <!-- Header — only visible on wide screens via CSS -->
+      <div class="log-section-header">
+        <span class="log-header-food">Food</span>
+        <div class="log-header-cols">
+          <span class="log-header-col">Fiber</span>
+          <span class="log-header-col">Prot</span>
+          <span class="log-header-col">Fat</span>
+          <span class="log-header-col">Na</span>
+          <span class="log-header-col">Sugar</span>
+        </div>
       </div>
       <div id="log-items"></div>
     </div>
@@ -404,7 +471,7 @@ button:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
       <i class="ti ti-salad"></i>
       Search for a food above to start logging
     </div>
-    <p class="disclaimer">All nutrients scale from per-100g database values. Volume conversions use typical food densities. Added sugar shows 0 for whole unprocessed foods — correct. Open Food Facts data is crowdsourced and may vary. NOVA from Open Food Facts where available; assign manually for USDA and manual entries.</p>
+    <p class="disclaimer">All nutrients scale from per-100g database values. Volume conversions use typical food densities. Added sugar shows 0 for whole unprocessed foods — correct. Open Food Facts data is crowdsourced and may vary. NOVA pulled from Open Food Facts where available; assign manually for USDA and manual entries.</p>
   </div>
 
   <!-- Water -->
@@ -413,16 +480,19 @@ button:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
     <div class="water-total" id="water-total">0 <span>oz today</span></div>
     <div class="water-btns">
       <button class="water-btn" onclick="addWater(32)">
-        <i class="ti ti-bottle" aria-hidden="true"></i> Pink Hydroflask / Large mason<br>
-        <span style="font-size:11px; opacity:0.8;">32 oz</span>
+        <i class="ti ti-bottle" aria-hidden="true"></i>
+        <span>Pink Hydroflask / Large mason</span>
+        <span class="water-btn-oz">32 oz</span>
       </button>
       <button class="water-btn" onclick="addWater(12)">
-        <i class="ti ti-glass" aria-hidden="true"></i> Standard glass<br>
-        <span style="font-size:11px; opacity:0.8;">12 oz</span>
+        <i class="ti ti-glass" aria-hidden="true"></i>
+        <span>Standard glass</span>
+        <span class="water-btn-oz">12 oz</span>
       </button>
       <button class="water-btn" onclick="addWater(8)">
-        <i class="ti ti-glass" aria-hidden="true"></i> Small glass<br>
-        <span style="font-size:11px; opacity:0.8;">8 oz</span>
+        <i class="ti ti-glass" aria-hidden="true"></i>
+        <span>Small glass</span>
+        <span class="water-btn-oz">8 oz</span>
       </button>
     </div>
     <div class="water-custom">
@@ -460,16 +530,14 @@ button:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
         <i class="ti ti-device-floppy" aria-hidden="true"></i> saved
       </span>
     </div>
-    <div class="row" style="align-items:flex-start; flex-wrap:wrap; gap:10px;">
-      <div style="flex:1; min-width:160px;">
-        <label style="font-size:12px; color:var(--text-secondary); display:block; margin-bottom:4px;">Date</label>
-        <input type="date" id="export-date" />
-      </div>
-      <div style="display:flex; gap:8px; align-items:flex-end; margin-top:20px;">
-        <button class="btn-primary" onclick="exportPDF()"><i class="ti ti-file-type-pdf" aria-hidden="true"></i> Export PDF</button>
-        <button onclick="exportCSV()"><i class="ti ti-file-type-csv" aria-hidden="true"></i> Export CSV</button>
-        <button onclick="clearAll()" style="color:var(--red); border-color:var(--red);"><i class="ti ti-trash" aria-hidden="true"></i> Clear day</button>
-      </div>
+    <div class="daily-field" style="margin-bottom:0;">
+      <label>Date</label>
+      <input type="date" id="export-date" />
+    </div>
+    <div class="export-actions">
+      <button class="btn-primary" onclick="exportPDF()"><i class="ti ti-file-type-pdf" aria-hidden="true"></i> Export PDF</button>
+      <button onclick="exportCSV()"><i class="ti ti-file-type-csv" aria-hidden="true"></i> Export CSV</button>
+      <button onclick="clearAll()" style="color:var(--red); border-color:var(--red);"><i class="ti ti-trash" aria-hidden="true"></i> Clear day</button>
     </div>
   </div>
 </div>
@@ -484,30 +552,29 @@ let waterOz = 0;
 let pendingFood = null;
 
 const STORE_KEY = 'nutrition_tracker_v3';
-
 document.getElementById('export-date').value = new Date().toISOString().split('T')[0];
 
-// ── Density overrides ────────────────────────────────────────────────────────
+// ── Density overrides ─────────────────────────────────────────────────────────
 const DENSITY_OVERRIDES = [
-  { match: /chia/,        tbsp:10,   tsp:3.3,  cup:160 },
-  { match: /oat/,         tbsp:10,   tsp:3.3,  cup:90  },
-  { match: /flour/,       tbsp:8,    tsp:2.7,  cup:120 },
-  { match: /sugar/,       tbsp:12,   tsp:4,    cup:200 },
-  { match: /honey/,       tbsp:21,   tsp:7,    cup:340 },
-  { match: /peanut.but/,  tbsp:16,   tsp:5.3,  cup:258 },
-  { match: /almond.but/,  tbsp:16,   tsp:5.3,  cup:258 },
-  { match: /olive.oil/,   tbsp:13.5, tsp:4.5,  cup:216 },
-  { match: /butter/,      tbsp:14,   tsp:4.7,  cup:227 },
-  { match: /milk/,        tbsp:15,   tsp:5,    cup:244 },
-  { match: /yogurt/,      tbsp:15,   tsp:5,    cup:245 },
-  { match: /rice/,        tbsp:12,   tsp:4,    cup:185 },
-  { match: /lentil/,      tbsp:12,   tsp:4,    cup:192 },
-  { match: /bean/,        tbsp:11,   tsp:3.7,  cup:180 },
-  { match: /walnut/,      tbsp:8,    tsp:2.7,  cup:120 },
-  { match: /almond/,      tbsp:9,    tsp:3,    cup:143 },
-  { match: /flax/,        tbsp:10,   tsp:3.3,  cup:160 },
-  { match: /hemp/,        tbsp:10,   tsp:3.3,  cup:160 },
-  { match: /protein.pow/, tbsp:8,    tsp:2.7,  cup:120 },
+  { match:/chia/,        tbsp:10,   tsp:3.3, cup:160 },
+  { match:/oat/,         tbsp:10,   tsp:3.3, cup:90  },
+  { match:/flour/,       tbsp:8,    tsp:2.7, cup:120 },
+  { match:/sugar/,       tbsp:12,   tsp:4,   cup:200 },
+  { match:/honey/,       tbsp:21,   tsp:7,   cup:340 },
+  { match:/peanut.but/,  tbsp:16,   tsp:5.3, cup:258 },
+  { match:/almond.but/,  tbsp:16,   tsp:5.3, cup:258 },
+  { match:/olive.oil/,   tbsp:13.5, tsp:4.5, cup:216 },
+  { match:/butter/,      tbsp:14,   tsp:4.7, cup:227 },
+  { match:/milk/,        tbsp:15,   tsp:5,   cup:244 },
+  { match:/yogurt/,      tbsp:15,   tsp:5,   cup:245 },
+  { match:/rice/,        tbsp:12,   tsp:4,   cup:185 },
+  { match:/lentil/,      tbsp:12,   tsp:4,   cup:192 },
+  { match:/bean/,        tbsp:11,   tsp:3.7, cup:180 },
+  { match:/walnut/,      tbsp:8,    tsp:2.7, cup:120 },
+  { match:/almond/,      tbsp:9,    tsp:3,   cup:143 },
+  { match:/flax/,        tbsp:10,   tsp:3.3, cup:160 },
+  { match:/hemp/,        tbsp:10,   tsp:3.3, cup:160 },
+  { match:/protein.pow/, tbsp:8,    tsp:2.7, cup:120 },
 ];
 
 function getDensity(name, unit) {
@@ -532,17 +599,14 @@ function amtToGrams(amt, unit, name, dbServingG) {
   return amt * getDensity(name, unit);
 }
 
-// ── NOVA helpers ─────────────────────────────────────────────────────────────
+// ── NOVA ──────────────────────────────────────────────────────────────────────
 const NOVA_LABELS = { 1:'1 — Unprocessed', 2:'2 — Culinary ingredient', 3:'3 — Processed', 4:'4 — Ultra-processed', 0:'Unknown' };
 const NOVA_CLASS  = { 1:'nova-1', 2:'nova-2', 3:'nova-3', 4:'nova-4', 0:'nova-u' };
-
 function novaBadge(n) {
-  const cls = NOVA_CLASS[n] || 'nova-u';
-  const lbl = n ? `${n}` : '?';
-  return `<span class="nova-badge ${cls}" title="${NOVA_LABELS[n]||'Unknown'}">NOVA ${lbl}</span>`;
+  return `<span class="nova-badge ${NOVA_CLASS[n]||'nova-u'}" title="${NOVA_LABELS[n]||'Unknown'}">NOVA ${n||'?'}</span>`;
 }
 
-// ── localStorage ─────────────────────────────────────────────────────────────
+// ── localStorage ──────────────────────────────────────────────────────────────
 let savedTimer = null;
 function flashSaved() {
   const el = document.getElementById('saved-indicator');
@@ -588,7 +652,7 @@ function loadState() {
   } catch(e) { console.warn('load failed', e); }
 }
 
-// ── API key ──────────────────────────────────────────────────────────────────
+// ── API key ───────────────────────────────────────────────────────────────────
 function saveKey() {
   const v = document.getElementById('key-usda').value.trim();
   if (!v) return;
@@ -600,16 +664,16 @@ function saveKey() {
   setTimeout(() => { st.textContent = ''; }, 3000);
 }
 
-// ── DB tab switching ─────────────────────────────────────────────────────────
+// ── DB switching ──────────────────────────────────────────────────────────────
 function setDb(db) {
   currentDb = db;
   document.querySelectorAll('.db-tab').forEach(t => t.classList.toggle('active', t.dataset.db === db));
-  document.getElementById('search-ui').style.display   = db === 'manual' ? 'none' : 'block';
-  document.getElementById('manual-ui').style.display   = db === 'manual' ? 'block' : 'none';
+  document.getElementById('search-ui').style.display  = db === 'manual' ? 'none' : 'block';
+  document.getElementById('manual-ui').style.display  = db === 'manual' ? 'block' : 'none';
   if (db !== 'manual') {
     document.getElementById('food-input').placeholder =
-      db === 'usda' ? 'Search USDA (e.g. chia seeds, oats, chicken breast)'
-                    : 'Search Open Food Facts (e.g. yogurt, lentils, granola)';
+      db === 'usda' ? 'Search USDA (e.g. chia seeds, oats)'
+                    : 'Search Open Food Facts (e.g. yogurt, lentils)';
     document.getElementById('results').style.display = 'none';
     hideServingPanel();
     setSearchStatus('');
@@ -622,7 +686,7 @@ function setSearchStatus(msg, type) {
   el.className = 'status' + (type ? ' ' + type : '');
 }
 
-// ── Search ───────────────────────────────────────────────────────────────────
+// ── Search ────────────────────────────────────────────────────────────────────
 async function searchFood() {
   const query = document.getElementById('food-input').value.trim();
   if (!query) return;
@@ -649,15 +713,15 @@ async function searchUSDA(query) {
   const res = await fetch(url);
   if (!res.ok) throw new Error('USDA ' + res.status);
   const data = await res.json();
-  return (data.foods || []).map(f => {
+  return (data.foods||[]).map(f => {
     const dbServingG = (f.servingSize && f.servingSizeUnit && f.servingSizeUnit.toLowerCase()==='g') ? f.servingSize : 100;
     return {
       name: f.description, brand: f.brandOwner||'', source:'USDA',
       dbServingG, dbServingLabel: f.servingSize ? `${f.servingSize}${f.servingSizeUnit||'g'}` : '100g',
       dataType: f.dataType, nova: 0,
       per100: {
-        fiber:   getN(f,[1079]),   protein: getN(f,[1003]),
-        fat:     getN(f,[1004]),   sodium:  getN(f,[1093]),
+        fiber:   getN(f,[1079]), protein: getN(f,[1003]),
+        fat:     getN(f,[1004]), sodium:  getN(f,[1093]),
         sugar:   getN(f,[2000,1235])
       }
     };
@@ -680,16 +744,15 @@ async function searchOFF(query) {
   return (data.products||[]).filter(p=>p.product_name).map(p => {
     const n = p.nutriments||{};
     const dbServingG = parseFloat(p.serving_quantity)||100;
-    const nova = parseInt(p.nova_group)||0;
     return {
       name: p.product_name, brand: p.brands||'', source:'Open Food Facts',
       dbServingG, dbServingLabel: p.serving_size||`${dbServingG}g`,
-      dataType:'Branded', nova,
+      dataType:'Branded', nova: parseInt(p.nova_group)||0,
       per100: {
         fiber:   parseFloat(n['fiber_100g']||0),
         protein: parseFloat(n['proteins_100g']||0),
         fat:     parseFloat(n['fat_100g']||0),
-        sodium:  parseFloat(n['sodium_100g']||0) * 1000, // convert g→mg
+        sodium:  parseFloat(n['sodium_100g']||0) * 1000,
         sugar:   parseFloat(n['sugars_100g']||0)
       }
     };
@@ -703,7 +766,7 @@ function renderResults(foods) {
     const li = document.createElement('li');
     const brand = f.brand ? ` · ${f.brand}` : '';
     const nova  = f.nova  ? ` · ${novaBadge(f.nova)}` : '';
-    li.innerHTML = `<span>${f.name}${brand}</span><span class="result-meta">${f.source} · ${f.dataType} · db serving: ${f.dbServingLabel}${nova}</span>`;
+    li.innerHTML = `<span>${f.name}${brand}</span><span class="result-meta">${f.source} · ${f.dataType} · ${f.dbServingLabel}${nova}</span>`;
     li.onclick = () => selectFood(f);
     list.appendChild(li);
   });
@@ -726,8 +789,8 @@ function computeScaled() {
   const amt   = parseFloat(document.getElementById('serving-amount').value)||0;
   const unit  = document.getElementById('serving-unit').value;
   const grams = amtToGrams(amt, unit, pendingFood.name, pendingFood.dbServingG);
-  const s     = grams / 100;
-  const p     = pendingFood.per100;
+  const s = grams / 100;
+  const p = pendingFood.per100;
   return {
     grams:   Math.round(grams*10)/10,
     fiber:   Math.round(p.fiber*s*10)/10,
@@ -742,14 +805,14 @@ function updateServingPreview() {
   const n = computeScaled(); if (!n) return;
   const unit = document.getElementById('serving-unit').value;
   const amt  = document.getElementById('serving-amount').value;
-  const note = unit!=='g' ? ` (≈${n.grams}g)` : '';
+  const note = unit!=='g' ? ` ≈${n.grams}g` : '';
   document.getElementById('serving-preview').innerHTML =
-    `<span>${amt} ${unit}${note}:</span>` +
-    `<span>Fiber <strong>${n.fiber.toFixed(1)}g</strong></span>` +
-    `<span>Protein <strong>${n.protein.toFixed(1)}g</strong></span>` +
-    `<span>Fat <strong>${n.fat.toFixed(1)}g</strong></span>` +
-    `<span>Na <strong>${n.sodium}mg</strong></span>` +
-    `<span>Sugar <strong>${n.sugar.toFixed(1)}g</strong></span>`;
+    `<span><span class="preview-label">Serving</span><strong>${amt} ${unit}${note}</strong></span>` +
+    `<span><span class="preview-label">Fiber</span><strong>${n.fiber.toFixed(1)}g</strong></span>` +
+    `<span><span class="preview-label">Protein</span><strong>${n.protein.toFixed(1)}g</strong></span>` +
+    `<span><span class="preview-label">Fat</span><strong>${n.fat.toFixed(1)}g</strong></span>` +
+    `<span><span class="preview-label">Sodium</span><strong>${n.sodium}mg</strong></span>` +
+    `<span><span class="preview-label">Sugar</span><strong>${n.sugar.toFixed(1)}g</strong></span>`;
 }
 
 function confirmServing() {
@@ -768,20 +831,18 @@ function hideServingPanel() {
   pendingFood = null;
 }
 
-// ── Manual add ───────────────────────────────────────────────────────────────
+// ── Manual add ────────────────────────────────────────────────────────────────
 function addManual() {
   const name = document.getElementById('manual-name').value.trim();
   if (!name) {
     const st = document.getElementById('manual-status');
-    st.className = 'status error'; st.textContent = 'Food name is required.';
-    return;
+    st.className = 'status error'; st.textContent = 'Food name is required.'; return;
   }
   addEntry({
-    name,
-    source:  'Manual',
+    name, source:'Manual',
     serving: document.getElementById('manual-serving').value.trim() || '—',
     nova:    parseInt(document.getElementById('manual-nova').value)||0,
-    grams:   0,
+    grams:0,
     fiber:   parseFloat(document.getElementById('manual-fiber').value)||0,
     protein: parseFloat(document.getElementById('manual-protein').value)||0,
     fat:     parseFloat(document.getElementById('manual-fat').value)||0,
@@ -795,7 +856,7 @@ function addManual() {
   document.getElementById('manual-status').textContent = '';
 }
 
-// ── Entry management ─────────────────────────────────────────────────────────
+// ── Entry management ──────────────────────────────────────────────────────────
 function addEntry(food) {
   entries.push({ id:Date.now(), food:food.name, serving:food.serving, source:food.source, nova:food.nova||0,
     fiber:food.fiber, protein:food.protein, fat:food.fat, sodium:food.sodium, sugar:food.sugar });
@@ -819,7 +880,7 @@ function removeEntry(id) {
   renderTotals(); renderLog(); updateGoalBars(); saveState();
 }
 
-// ── Render ───────────────────────────────────────────────────────────────────
+// ── Render ────────────────────────────────────────────────────────────────────
 function renderTotals() {
   document.getElementById('total-fiber').innerHTML   = `${totals.fiber.toFixed(1)} <span class="metric-unit">g</span>`;
   document.getElementById('total-protein').innerHTML = `${totals.protein.toFixed(1)} <span class="metric-unit">g</span>`;
@@ -835,18 +896,32 @@ function renderLog() {
   if (!entries.length) { section.style.display='none'; empty.style.display='block'; return; }
   section.style.display='block'; empty.style.display='none';
   container.innerHTML = entries.map(e => `
-    <div class="log-item">
-      <div class="food-col">
-        <div class="food-name" title="${e.food}">${e.food}</div>
-        <div class="food-meta">${e.serving} · ${e.source}</div>
+    <div class="log-item-card">
+      <div class="log-item-top">
+        <div class="food-col">
+          <div class="food-name" title="${e.food}">${e.food}</div>
+          <div class="food-meta">${e.serving} · ${e.source} · ${novaBadge(e.nova)}</div>
+        </div>
+        <!-- Desktop columns -->
+        <div class="log-table-cols">
+          <span class="log-tc">${e.fiber.toFixed(1)}</span>
+          <span class="log-tc">${e.protein.toFixed(1)}</span>
+          <span class="log-tc">${e.fat.toFixed(1)}</span>
+          <span class="log-tc">${e.sodium}</span>
+          <span class="log-tc">${e.sugar.toFixed(1)}</span>
+        </div>
+        <button class="remove-btn" onclick="removeEntry(${e.id})" aria-label="Remove ${e.food}">
+          <i class="ti ti-x" aria-hidden="true"></i>
+        </button>
       </div>
-      <span>${e.fiber.toFixed(1)}</span>
-      <span>${e.protein.toFixed(1)}</span>
-      <span>${e.fat.toFixed(1)}</span>
-      <span>${e.sodium}</span>
-      <span>${e.sugar.toFixed(1)}</span>
-      <span>${novaBadge(e.nova)}</span>
-      <span><button class="remove-btn" onclick="removeEntry(${e.id})" aria-label="Remove ${e.food}"><i class="ti ti-x" aria-hidden="true"></i></button></span>
+      <!-- Mobile nutrient grid -->
+      <div class="log-nutrients">
+        <div class="log-nutrient"><div class="log-nutrient-label">Fiber</div><div class="log-nutrient-value">${e.fiber.toFixed(1)}g</div></div>
+        <div class="log-nutrient"><div class="log-nutrient-label">Protein</div><div class="log-nutrient-value">${e.protein.toFixed(1)}g</div></div>
+        <div class="log-nutrient"><div class="log-nutrient-label">Fat</div><div class="log-nutrient-value">${e.fat.toFixed(1)}g</div></div>
+        <div class="log-nutrient"><div class="log-nutrient-label">Sodium</div><div class="log-nutrient-value">${e.sodium}mg</div></div>
+        <div class="log-nutrient"><div class="log-nutrient-label">Sugar</div><div class="log-nutrient-value">${e.sugar.toFixed(1)}g</div></div>
+      </div>
     </div>`).join('');
 }
 
@@ -861,21 +936,18 @@ function updateGoalBars() {
   document.getElementById('goal-pct-protein').textContent = pp+'%';
 }
 
-// ── Water ────────────────────────────────────────────────────────────────────
-function addWater(oz) {
-  waterOz += oz;
-  renderWater(); saveState();
-}
+// ── Water ─────────────────────────────────────────────────────────────────────
+function addWater(oz)    { waterOz += oz; renderWater(); saveState(); }
 function addWaterCustom() {
   const v = parseFloat(document.getElementById('water-custom').value)||0;
   if (v>0) { waterOz += v; document.getElementById('water-custom').value=''; renderWater(); saveState(); }
 }
-function resetWater() { waterOz=0; renderWater(); saveState(); }
-function renderWater() {
+function resetWater()    { waterOz=0; renderWater(); saveState(); }
+function renderWater()   {
   document.getElementById('water-total').innerHTML = `${waterOz} <span>oz today</span>`;
 }
 
-// ── Export ───────────────────────────────────────────────────────────────────
+// ── Export ────────────────────────────────────────────────────────────────────
 function getDailyFields() {
   return {
     date:        document.getElementById('export-date').value,
@@ -896,13 +968,11 @@ function exportPDF() {
   const sf = (sz,st='normal') => doc.setFont('helvetica',st).setFontSize(sz);
   const tx = (t,x,yy,o) => doc.text(String(t),x,yy,o);
 
-  // Header
   doc.setFillColor(245,245,242); doc.rect(0,0,pageW,72,'F');
   sf(18,'bold'); doc.setTextColor(26,26,24); tx('Daily Nutrition Log',margin,38);
   sf(11); doc.setTextColor(107,107,103); tx(d.date||new Date().toLocaleDateString(),margin,56);
   y=96;
 
-  // Daily fields
   sf(9,'bold'); doc.setTextColor(107,107,103);
   tx('SLEEP',margin,y); tx('CYCLE DAY',margin+110,y); tx('WATER',margin+220,y); tx('NOTES',margin+300,y);
   y+=14; sf(13,'normal'); doc.setTextColor(26,26,24);
@@ -916,7 +986,6 @@ function exportPDF() {
   doc.setDrawColor(220,220,216); doc.setLineWidth(0.5);
   doc.line(margin,y,pageW-margin,y); y+=20;
 
-  // Totals
   sf(9,'bold'); doc.setTextColor(107,107,103); tx('NUTRITION TOTALS',margin,y); y+=14;
   const mets=[
     {label:'Fiber',   value:`${totals.fiber.toFixed(1)}g`,   goal:`Goal: ${d.fiberGoal}g`},
@@ -935,7 +1004,6 @@ function exportPDF() {
   });
   y+=68;
 
-  // Goal bars
   const fg=parseFloat(d.fiberGoal)||25, pg=parseFloat(d.proteinGoal)||100;
   const fp=Math.min(1,totals.fiber/fg), pp=Math.min(1,totals.protein/pg);
   sf(8); doc.setTextColor(107,107,103);
@@ -950,34 +1018,32 @@ function exportPDF() {
 
   doc.line(margin,y,pageW-margin,y); y+=20;
 
-  // Food log
   if(entries.length){
     sf(9,'bold'); doc.setTextColor(107,107,103); tx('FOOD LOG',margin,y); y+=14;
     doc.setFillColor(245,245,242); doc.rect(margin,y-10,contentW,20,'F');
     sf(8,'bold'); doc.setTextColor(107,107,103);
-    tx('Food',margin+4,y+4);
-    tx('Serving',margin+contentW*0.40,y+4);
-    tx('Fiber', margin+contentW*0.55,y+4,{align:'right'});
-    tx('Prot',  margin+contentW*0.65,y+4,{align:'right'});
-    tx('Fat',   margin+contentW*0.74,y+4,{align:'right'});
-    tx('Na',    margin+contentW*0.84,y+4,{align:'right'});
-    tx('Sugar', margin+contentW*0.93,y+4,{align:'right'});
-    tx('NOVA',  margin+contentW,     y+4,{align:'right'});
+    tx('Food',   margin+4,           y+4);
+    tx('Serving',margin+contentW*0.38,y+4);
+    tx('Fiber',  margin+contentW*0.53,y+4,{align:'right'});
+    tx('Prot',   margin+contentW*0.63,y+4,{align:'right'});
+    tx('Fat',    margin+contentW*0.72,y+4,{align:'right'});
+    tx('Na',     margin+contentW*0.83,y+4,{align:'right'});
+    tx('Sugar',  margin+contentW*0.92,y+4,{align:'right'});
+    tx('NOVA',   margin+contentW,     y+4,{align:'right'});
     y+=20;
     doc.setLineWidth(0.5); doc.setDrawColor(220,220,216);
     entries.forEach((e,i)=>{
       if(i%2===0){doc.setFillColor(252,252,251);doc.rect(margin,y-10,contentW,20,'F');}
       sf(10,'normal'); doc.setTextColor(26,26,24);
-      const nl=doc.splitTextToSize(e.food,contentW*0.38);
+      const nl=doc.splitTextToSize(e.food,contentW*0.36);
       tx(nl,margin+4,y+2);
-      sf(9); doc.setTextColor(107,107,103);
-      tx(e.serving,margin+contentW*0.40,y+2);
+      sf(9); doc.setTextColor(107,107,103); tx(e.serving,margin+contentW*0.38,y+2);
       sf(10); doc.setTextColor(26,26,24);
-      tx(e.fiber.toFixed(1)+'g',   margin+contentW*0.55,y+2,{align:'right'});
-      tx(e.protein.toFixed(1)+'g', margin+contentW*0.65,y+2,{align:'right'});
-      tx(e.fat.toFixed(1)+'g',     margin+contentW*0.74,y+2,{align:'right'});
-      tx(e.sodium+'mg',            margin+contentW*0.84,y+2,{align:'right'});
-      tx(e.sugar.toFixed(1)+'g',   margin+contentW*0.93,y+2,{align:'right'});
+      tx(e.fiber.toFixed(1)+'g',   margin+contentW*0.53,y+2,{align:'right'});
+      tx(e.protein.toFixed(1)+'g', margin+contentW*0.63,y+2,{align:'right'});
+      tx(e.fat.toFixed(1)+'g',     margin+contentW*0.72,y+2,{align:'right'});
+      tx(e.sodium+'mg',            margin+contentW*0.83,y+2,{align:'right'});
+      tx(e.sugar.toFixed(1)+'g',   margin+contentW*0.92,y+2,{align:'right'});
       tx(e.nova?String(e.nova):'?',margin+contentW,     y+2,{align:'right'});
       doc.line(margin,y+10,pageW-margin,y+10);
       y+=nl.length>1?nl.length*13+6:20;
@@ -1015,9 +1081,9 @@ function clearAll() {
   renderWater(); renderTotals(); renderLog(); updateGoalBars();
 }
 
-// ── Event listeners ──────────────────────────────────────────────────────────
-document.getElementById('food-input').addEventListener('keydown', e=>{ if(e.key==='Enter') searchFood(); });
-document.getElementById('key-usda').addEventListener('keydown',  e=>{ if(e.key==='Enter') saveKey(); });
+// ── Event listeners ───────────────────────────────────────────────────────────
+document.getElementById('food-input').addEventListener('keydown',   e=>{ if(e.key==='Enter') searchFood(); });
+document.getElementById('key-usda').addEventListener('keydown',     e=>{ if(e.key==='Enter') saveKey(); });
 document.getElementById('water-custom').addEventListener('keydown', e=>{ if(e.key==='Enter') addWaterCustom(); });
 ['sleep-hours','cycle-day','daily-notes','fiber-goal','protein-goal'].forEach(id=>{
   document.getElementById(id).addEventListener('input', saveState);
